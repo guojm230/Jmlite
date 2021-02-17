@@ -15,17 +15,22 @@ A simple operating system consist of the following components:
 - ### Assambly dialect: nasm
 - ### Kernel launage: cpp
 - ### Cpp compile tool: clang
-- ### build tool: makefile
+- ### build tool: make
 - ### compile environment: ubuntu 20.04
 
 
-## Build kernel throuth grub
-### 1. grub fundamentals
-- #### grub layout header
-    The layout header of grub is a sepecial data block which contains  some necessary informations about kernel.It must be placed within the first 32768 bytes of the OS image and must be 64-bit aligned. </br>
+## Introduction
+Before start off writing code,we first need to understand the process of booting a operating system on x86 platform.
+### 1. Load mbr(Master Boot Record) from disk or floppy into a special address(0x7c00) of memory. This task will be executed by hardware;
+### 2. Mbr load bootloader
+### 3. Bootloader load kernel
+### 4. Kernel init fundamental function including process manager, memory manager, file system manager and so on. After that kernel can also load other modules,such as network manager.
 
-    So we first need to write a asm files which contain grub layout header and link it into the final OS image.
-- #### grub tools
-    Grub has many useful tools.
+## Contents
+
+### 1. [Writing mbr code]
+
+
+
 
 
