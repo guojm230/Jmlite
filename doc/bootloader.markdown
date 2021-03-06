@@ -1,7 +1,14 @@
-# 1.Write Master Boot Record
+# Write Master Boot Record
 ## Fundamental knowledges
-When the computer starts up, it will enumerate all useable storage device to find a bootable device whose first partition end with 0x55aa.</br>
-The device can be disk or floppy.
+When the computer starts up, it will enumerate all useable storage devices to find a bootable device. This process is executed by hardware through checking whether the first sector of each storage device is MBR(Master Boot Record). MBR is the first sector of storage device containg bootstrap codes. It consist of 446 executable codes,partiontables and last 2 bytes containing a magic number 0xAA55(little-endian). Then hardware will load MBR above process found into a special memory address(0x7c00) to execute it</br>
+
+Because Hardware only load MBR(512 bytes) into memory, we must leverage MBR to load more code for resolving the size limition.
+
+So our overall tasks are very clear:
+1. Write a MBR to load bootloader
+2. Write a bootloader to load kernel
+
+This method is usually called chain-loading.
 
 ## Determine type and index of device we are using
 In general,we install our boot iso on not only disk but also floppy.
@@ -9,6 +16,8 @@ In general,we install our boot iso on not only disk but also floppy.
 ## Outline
 We first need to load bootloader into memory within 1MB. Consider the memory layout when run mbr: </br>
 Our mbr code be loaed into 0x7c00 and stack expand downward from 0x7c00
+
+
 
 ## Problems about assembly
 

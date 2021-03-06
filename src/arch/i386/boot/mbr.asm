@@ -23,11 +23,13 @@ section mbr vstart=0x7c00
     mov sp,ax
     ;;;;;;;;;;
     call read_bootloader
-    mov ax,0x00
+    mov dl,boot_device_index
+
+    mov ax,BOOT_LOADER_SEG
     mov es,ax
     mov ax,BOOT_LOADER_SEG
     mov ds,ax
-    jmp far [es:boot_loader_entry]
+    jmp far [es:2]
 
 read_bootloader:
     push bp
@@ -39,14 +41,14 @@ read_bootloader:
     ;if(size == 0 || size == 1)
     ;   return
     ;else load remainder sectors
-    mov ax,boot_loader_size
+    mov ax,[boot_loader_size]
     xor dx,dx
     mov cx,512
     div cx
-    test ax,0
+    cmp ax,0
     je .ret
     sub ax,1
-    test ax,0
+    cmp ax,0
     jz .ret
     mov cx,ax
     ;prepare parameters for reading remainder sectors
@@ -55,7 +57,7 @@ read_bootloader:
     mov ax,[dap_offset]
     add ax,512
     mov [dap_offset],ax
-    mov ax,dap_start_sector
+    mov ax,[dap_start_sector]
     inc ax
     mov [dap_start_sector],ax
     mov ah,0x42
@@ -196,8 +198,6 @@ dap_start_sector:
 
 text_cusor:
     dw 0
-
-
 
 
 times 510-($-$$) db 0
